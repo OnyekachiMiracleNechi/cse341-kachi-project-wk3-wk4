@@ -17,8 +17,14 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Routes
+
+app.use('/users', usersRoutes);
 app.use('/api/users', usersRoutes);
+
+app.use('/products', productsRoutes);
 app.use('/api/products', productsRoutes);
+
+app.use('/orders', ordersRoutes);
 app.use('/api/orders', ordersRoutes);
 
 
