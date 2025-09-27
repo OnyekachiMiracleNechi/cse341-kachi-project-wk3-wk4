@@ -5,18 +5,27 @@
     "version": "1.0.0",
     "description": "API documentation for Users, Products, and Orders"
   },
-  "host": "cse341-kachi-project-wk3-wk4.onrender.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "httpS"
+    "https",
+    "http"
   ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your JWT token like: Bearer <token>"
+    }
+  },
   "paths": {
     "/api/orders": {
       "get": {
         "tags": [
           "Orders"
         ],
-        "summary": "Get all orders",
+        "summary": "Get all orders (public)",
         "responses": {
           "200": {
             "description": "List of all orders"
@@ -27,7 +36,12 @@
         "tags": [
           "Orders"
         ],
-        "summary": "Create a new order",
+        "summary": "Create a new order (protected)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -79,7 +93,7 @@
         "tags": [
           "Orders"
         ],
-        "summary": "Get a single order by ID",
+        "summary": "Get a single order by ID (public)",
         "parameters": [
           {
             "in": "path",
@@ -101,7 +115,12 @@
         "tags": [
           "Orders"
         ],
-        "summary": "Update an order",
+        "summary": "Update an order (protected)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -160,7 +179,12 @@
         "tags": [
           "Orders"
         ],
-        "summary": "Delete an order",
+        "summary": "Delete an order (protected)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -195,7 +219,12 @@
         "tags": [
           "Products"
         ],
-        "summary": "Create a new product",
+        "summary": "Create a new product (Protected)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -227,6 +256,9 @@
           },
           "400": {
             "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -258,7 +290,12 @@
         "tags": [
           "Products"
         ],
-        "summary": "Update a product",
+        "summary": "Update a product (Protected)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -297,6 +334,9 @@
           "400": {
             "description": "Invalid input"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Product not found"
           }
@@ -306,7 +346,12 @@
         "tags": [
           "Products"
         ],
-        "summary": "Delete a product",
+        "summary": "Delete a product (Protected)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -318,6 +363,9 @@
         "responses": {
           "200": {
             "description": "Product deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Product not found"
@@ -331,6 +379,11 @@
           "Users"
         ],
         "summary": "Get all users",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of all users"
@@ -341,7 +394,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Create a new user",
+        "summary": "Create a new user (no auth required)",
         "parameters": [
           {
             "in": "body",
@@ -383,6 +436,11 @@
           "Users"
         ],
         "summary": "Get a user by ID",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -405,6 +463,11 @@
           "Users"
         ],
         "summary": "Update a user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -450,6 +513,11 @@
           "Users"
         ],
         "summary": "Delete a user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -472,7 +540,6 @@
   "definitions": {},
   "responses": {},
   "parameters": {},
-  "securityDefinitions": {},
   "tags": [
     {
       "name": "Orders",

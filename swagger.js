@@ -1,7 +1,7 @@
 const fs = require('fs');
 const swaggerJsdoc = require('swagger-jsdoc');
 
-// Configure swagger-jsdoc
+// Swagger definition configuration
 const options = {
   swaggerDefinition: {
     swagger: '2.0',
@@ -10,11 +10,19 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for Users, Products, and Orders',
     },
-    host: 'cse341-kachi-project-wk3-wk4.onrender.com',
+    host: process.env.SWAGGER_HOST || 'localhost:3000', // Change for local/testing
     basePath: '/',
-    schemes: ['https'],
+    schemes: ['https', 'http'],
+    securityDefinitions: {
+      Bearer: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+        description: 'Enter your JWT token like: Bearer <token>',
+      },
+    },
   },
-  apis: ['./routes/*.js'], // <--- point to your route files
+  apis: ['./routes/*.js'], // Path to your route files
 };
 
 // Generate swagger specification
@@ -22,4 +30,5 @@ const swaggerSpec = swaggerJsdoc(options);
 
 // Write the swagger.json file
 fs.writeFileSync('swagger.json', JSON.stringify(swaggerSpec, null, 2));
+
 console.log('✅ swagger.json generated successfully!');

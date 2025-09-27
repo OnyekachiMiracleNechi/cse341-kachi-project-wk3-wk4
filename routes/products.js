@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productsController = require('../controllers/products');
+const authenticate = require('../middlewares/auth'); // JWT auth middleware
 
 /**
  * @swagger
@@ -45,7 +46,9 @@ router.get('/:id', productsController.getSingleProduct);
  * /api/products:
  *   post:
  *     tags: [Products]
- *     summary: Create a new product
+ *     summary: Create a new product (Protected)
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: body
  *         name: product
@@ -67,15 +70,19 @@ router.get('/:id', productsController.getSingleProduct);
  *         description: Product created
  *       400:
  *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
  */
-router.post('/', productsController.createProduct);
+router.post('/', authenticate, productsController.createProduct);
 
 /**
  * @swagger
  * /api/products/{id}:
  *   put:
  *     tags: [Products]
- *     summary: Update a product
+ *     summary: Update a product (Protected)
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -101,17 +108,21 @@ router.post('/', productsController.createProduct);
  *         description: Product updated
  *       400:
  *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Product not found
  */
-router.put('/:id', productsController.updateProduct);
+router.put('/:id', authenticate, productsController.updateProduct);
 
 /**
  * @swagger
  * /api/products/{id}:
  *   delete:
  *     tags: [Products]
- *     summary: Delete a product
+ *     summary: Delete a product (Protected)
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -120,9 +131,11 @@ router.put('/:id', productsController.updateProduct);
  *     responses:
  *       200:
  *         description: Product deleted
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Product not found
  */
-router.delete('/:id', productsController.deleteProduct);
+router.delete('/:id', authenticate, productsController.deleteProduct);
 
 module.exports = router;

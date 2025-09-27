@@ -15,6 +15,8 @@ const usersController = require('../controllers/users');
  *   get:
  *     tags: [Users]
  *     summary: Get all users
+ *     security:
+ *       - Bearer: []
  *     responses:
  *       200:
  *         description: List of all users
@@ -27,6 +29,8 @@ router.get('/', usersController.getAllUsers);
  *   get:
  *     tags: [Users]
  *     summary: Get a user by ID
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -45,7 +49,7 @@ router.get('/:id', usersController.getSingleUser);
  * /api/users:
  *   post:
  *     tags: [Users]
- *     summary: Create a new user
+ *     summary: Create a new user (no auth required)
  *     parameters:
  *       - in: body
  *         name: user
@@ -76,6 +80,8 @@ router.post('/', usersController.createUser);
  *   put:
  *     tags: [Users]
  *     summary: Update a user
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -110,6 +116,8 @@ router.put('/:id', usersController.updateUser);
  *   delete:
  *     tags: [Users]
  *     summary: Delete a user
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id

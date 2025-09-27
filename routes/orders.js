@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ordersController = require('../controllers/orders');
+const authenticate = require('../middlewares/auth'); // JWT middleware
 
 /**
  * @swagger
@@ -14,7 +15,7 @@ const ordersController = require('../controllers/orders');
  * /api/orders:
  *   get:
  *     tags: [Orders]
- *     summary: Get all orders
+ *     summary: Get all orders (public)
  *     responses:
  *       200:
  *         description: List of all orders
@@ -26,7 +27,7 @@ router.get('/', ordersController.getAllOrders);
  * /api/orders/{id}:
  *   get:
  *     tags: [Orders]
- *     summary: Get a single order by ID
+ *     summary: Get a single order by ID (public)
  *     parameters:
  *       - in: path
  *         name: id
@@ -45,7 +46,9 @@ router.get('/:id', ordersController.getSingleOrder);
  * /api/orders:
  *   post:
  *     tags: [Orders]
- *     summary: Create a new order
+ *     summary: Create a new order (protected)
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: body
  *         name: order
@@ -75,14 +78,16 @@ router.get('/:id', ordersController.getSingleOrder);
  *       400:
  *         description: Invalid input
  */
-router.post('/', ordersController.createOrder);
+router.post('/', authenticate, ordersController.createOrder);
 
 /**
  * @swagger
  * /api/orders/{id}:
  *   put:
  *     tags: [Orders]
- *     summary: Update an order
+ *     summary: Update an order (protected)
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -118,14 +123,16 @@ router.post('/', ordersController.createOrder);
  *       404:
  *         description: Order not found
  */
-router.put('/:id', ordersController.updateOrder);
+router.put('/:id', authenticate, ordersController.updateOrder);
 
 /**
  * @swagger
  * /api/orders/{id}:
  *   delete:
  *     tags: [Orders]
- *     summary: Delete an order
+ *     summary: Delete an order (protected)
+ *     security:
+ *       - Bearer: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -137,6 +144,6 @@ router.put('/:id', ordersController.updateOrder);
  *       404:
  *         description: Order not found
  */
-router.delete('/:id', ordersController.deleteOrder);
+router.delete('/:id', authenticate, ordersController.deleteOrder);
 
 module.exports = router;
