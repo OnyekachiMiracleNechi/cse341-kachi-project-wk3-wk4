@@ -10,9 +10,9 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for Users, Products, and Orders',
     },
-    host: process.env.SWAGGER_HOST || 'localhost:3000', // Change for local/testing
+    host:  'cse341-kachi-project-wk3-wk4.onrender.com', // Change for local/testing
     basePath: '/',
-    schemes: ['https', 'http'],
+    schemes: ['https'],
     securityDefinitions: {
       Bearer: {
         type: 'apiKey',

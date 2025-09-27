@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "description": "API documentation for Users, Products, and Orders"
   },
-  "host": "localhost:3000",
+  "host": "cse341-kachi-project-wk3-wk4.onrender.com",
   "basePath": "/",
   "schemes": [
-    "https",
-    "http"
+    "https"
+    
   ],
   "securityDefinitions": {
     "Bearer": {
