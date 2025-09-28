@@ -8,8 +8,8 @@
   "host": "cse341-kachi-project-wk3-wk4.onrender.com",
   "basePath": "/",
   "schemes": [
-    "https"
     
+    "https"
   ],
   "securityDefinitions": {
     "Bearer": {

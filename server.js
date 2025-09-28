@@ -10,20 +10,18 @@ const cors = require('cors');
 const usersRoutes = require('./routes/users');
 const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
-const authenticate = require('./middlewares/auth'); // JWT middleware
+const authenticate = require('./middlewares/auth');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger.json');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Enable CORS for Swagger and front-end requests
+// ✅ Enable CORS
 app.use(cors());
-
-// Middleware
 app.use(express.json());
 
-// Session for OAuth
+// ✅ Session for OAuth
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'supersecret',
@@ -32,17 +30,12 @@ app.use(
   })
 );
 
-// Passport setup for Google OAuth
+// ✅ Passport setup
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 
 passport.use(
   new GoogleStrategy(
@@ -54,23 +47,28 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const User = require('./models/users');
       try {
+        // ✅ Check if user already exists
         let user = await User.findOne({ email: profile.emails[0].value });
+
         if (!user) {
+          // ✅ Create new OAuth user WITHOUT password
           user = await User.create({
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value,
-            password: '', // OAuth user doesn't need password
+            oauth: true, // 👈 mark as OAuth user
             role: 'customer',
           });
         }
-        // Generate JWT
+
+        // ✅ Generate JWT token for OAuth user
         const token = jwt.sign(
           { id: user._id, email: user.email },
           process.env.JWT_SECRET,
           { expiresIn: '1h' }
         );
-        user.token = token; // attach token for frontend use
+        user.token = token;
+
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -79,29 +77,19 @@ passport.use(
   )
 );
 
-// Swagger Docs
+// ✅ Swagger Docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Routes
-// Users routes (protected)
+// ✅ Routes
 app.use('/users', authenticate, usersRoutes);
 app.use('/api/users', authenticate, usersRoutes);
-
-// Products routes
-// Only GET routes are public, others are protected
 app.use('/products', productsRoutes);
 app.use('/api/products', productsRoutes);
-
-// Orders routes
-// GET routes are public, POST/PUT/DELETE are protected inside the router
 app.use('/orders', ordersRoutes);
 app.use('/api/orders', ordersRoutes);
 
-// OAuth Routes
-app.get(
-  '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+// ✅ Google OAuth Routes
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get(
   '/auth/google/callback',
@@ -109,19 +97,19 @@ app.get(
   (req, res) => {
     res.json({
       success: true,
-      message: 'Logged in with Google',
-      token: req.user.token,
+      message: 'Logged in with Google ✅',
+      token: req.user.token, // 👈 Use this token in Swagger
       user: req.user,
     });
   }
 );
 
-// Default route
+// ✅ Default route
 app.get('/', (req, res) => {
   res.send('Welcome to the API 🚀');
 });
 
-// Connect to MongoDB
+// ✅ MongoDB connection
 mongoose
   .connect(process.env.MONGODB_URI, {
     dbName: 'ecommerce-api',

@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema(
       unique: true, 
       match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'] 
     },
-    password: { type: String, required: [true, 'Password is required'] },
+    password: { 
+      type: String, 
+      required: function() { return !this.oauth; } // only required if not an OAuth user
+    },
+    oauth: { type: Boolean, default: false }, // indicates OAuth user
     role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
     address: String,
     phone: String
